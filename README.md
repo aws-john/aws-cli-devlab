@@ -16,23 +16,23 @@ In addition to the low-level, API-equivalent commands, several AWS services prov
 
 To run this lab, you will require an AWS account. You will be using a Cloud9, which is a web-based development environment that provides a terminal program running on a virtual machine that has the AWS CLI pre-installed and configured.
 
-🖥️ Login to your AWS Account.
+**1.** Login to your AWS Account.
 
-🖥️ From the **Services** menu, select **Cloud9**.
+**2.** From the **Services** menu, select **Cloud9**.
 
 If you are prompted for a region, select the one closest to you.
 
 You will now create a Cloud9 environment.
 
-🖥️ Click **Create environment**.
+**3.** Click **Create environment**.
 
-🖥️ For **Name**, enter: `cli-lab`
+**4.** For **Name**, enter: `cli-lab`
 
-🖥️ Click **Next step** twice, then click **Create environment**.
+**5.** Click **Next step** twice, then click **Create environment**.
 
 Cloud9 will take a few minutes to launch the environment. Once it is ready, continue to the next step.
 
-🖥️ Maximize the terminal window by clicking the icon as shown below:
+**6.** Maximize the terminal window by clicking the icon as shown below:
 
 ![Cloud 9 Maximize Terminal](Cloud9MaximizeTerminal.png)
 
@@ -42,7 +42,7 @@ Cloud9 will take a few minutes to launch the environment. Once it is ready, cont
 
 The AWS CLI includes built-in help. You can get help with any command when using the AWS CLI. To do so, simply type `help` at the end of a command name.
 
-🖥️ Enter this command in the terminal window:
+**7.** Enter this command in the terminal window:
 
 ```
 aws help
@@ -50,7 +50,7 @@ aws help
 
 It will display help for the general AWS CLI options and the available top-level commands.
 
-🖥️ Press `q` to exit the help page.
+**8.** Press `q` to exit the help page.
 
 ### The AWS CLI Command Structure
 
@@ -79,14 +79,14 @@ Whenever you store data in Amazon S3, you put it in a construct called a **bucke
 
 Amazon S3 Buckets must have **globally unique names**.
 
-🖥️ Run this command to generate a unique name:
+**9.** Run this command to generate a unique name:
 
 ```
 export BUCKET_NAME="devlab-cli-bucket-$(uuidgen)"
 echo $BUCKET_NAME
 ```
 
-🖥️ Run this command to make a bucket (`mb`):
+**10.** Run this command to make a bucket (`mb`):
 
 ```
 aws s3 mb s3://$BUCKET_NAME
@@ -100,13 +100,13 @@ Amazon S3 includes a `sync` command that **syncs whole buckets or directories**.
 
 You will now use the `sync` command to copy files to the Amazon S3 bucket you created. The Cloud 9 virtual machine has some basic website structure in `/var/www` that you will copy to the buket.
 
-🖥️ Run this command:
+**11.** Run this command:
 
 ```
 aws s3 sync /var/www s3://$BUCKET_NAME
 ```
 
-🖥️ Run this command to list the contents of the bucket:
+**12.** Run this command to list the contents of the bucket:
 
 ```
 aws s3 ls s3://$BUCKET_NAME
@@ -114,7 +114,7 @@ aws s3 ls s3://$BUCKET_NAME
 
 You will notice that there are several directories (or 'prefixes') listed.
 
-🖥️ Run this command to view the contents of the `icon` directory:
+**13.** Run this command to view the contents of the `icon` directory:
 
 ```
 aws s3 ls s3://$BUCKET_NAME/icons/
@@ -122,7 +122,7 @@ aws s3 ls s3://$BUCKET_NAME/icons/
 
 A popular use for the `aw s3 sync` command is to publish a website built with a static site generator. Since [Amazon S3 is capable of hosting static websites](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) from a publicly accessible bucket, deploying new builds is as easy as running a build command in your local development workstation or CI build server and then running `aws s3 sync path/to/built/site s3://your-webite-s3-bucket`.
 
-🖥️ Run this command to delete the S3 bucket and its content:
+**14.** Run this command to delete the S3 bucket and its content:
 
 ```
 aws s3 rb s3://$BUCKET_NAME --force
@@ -136,7 +136,7 @@ The `--filter` and `--query` flags are powerful capabilities that can control th
 
 Some (not all) AWS CLI commands support the `--filter` flag to limit the items returned from AWS. For example, `aws ec2 describe-images` will list all Amazon Machine Images (AMIs). It accepts a `--filter` argument to narrow down the list of results before AWS sends the data back to your computer.
 
-🖥️ Run this command, which includes a `--filter` argument:
+**15.** Run this command, which includes a `--filter` argument:
 
 ```
 aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base*"
@@ -148,7 +148,7 @@ The filter requested only the AMIs for Windows Server 2019, rather than returnin
 
 The `describe-instances` call you just used returned many fields, but what if you only want one of those fields? The `--query` argument can be used to limit the fields that are returned by a command.
 
-🖥️ Run this command, which includes a `--query` argument:
+**16.** Run this command, which includes a `--query` argument:
 
 ```
 aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base*" --query Images[*].[Name,ImageId]
@@ -162,7 +162,7 @@ This query example is relatively simple, but you can perform very powerful queri
 
 Sometimes it can be a lot easier to read the output from AWS CLI commands if you change the output format. In addition to the default JSON output, the AWS CLI can also output results in an ASCII tabular format or as tab-seperated lines of text.
 
-🖥️ Run this command, which includes an `--output` argument:
+**17.** Run this command, which includes an `--output` argument:
 
 ```
 aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base*" --query Images[*].[Name,ImageId] --output text
@@ -170,7 +170,7 @@ aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Serv
 
 It displays the results as text-only rather than in JSON format.
 
-🖥️ Run this command to view the results as a formatted table:
+**18.** Run this command to view the results as a formatted table:
 
 ```
 aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base*" --query Images[*].[Name,ImageId] --output table
@@ -178,7 +178,7 @@ aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Serv
 
 The text output style from `--output text` is helpful for passing the results on to other UNIX commands.
 
-🖥️ Run this command to sort the output by date:
+**19.** Run this command to sort the output by date:
 
 ```
 aws ec2 describe-images --owners amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base*" --query Images[*].[Name,ImageId] --output text | cut -f 1 | sort
@@ -190,7 +190,7 @@ You will now take everything you have learned and put it together in one compreh
 
 First, you will create an **IAM role** suitable for attaching to an Amazon EC2 instance. This is a common practice that lets you grant Amazon EC2 instances permissions for various API calls on AWS without having to manage credentials yourself on the instance.
 
-🖥️ Run this command (copy and paste all lines together):
+**20.** Run this command (copy and paste all lines together):
 
 ```
 aws iam create-role \
@@ -206,7 +206,7 @@ aws iam attach-role-policy \
 
 Now, you will try to delete the role. This will not work because you cannot delete a role that has policies attached to it.
 
-🖥️ Run this command:
+**21.** Run this command:
 
 ```
 aws iam delete-role --role-name Cloud9-devlab-ec2-role
@@ -225,7 +225,7 @@ You will use a shell script to find all roles that begin with `Cloud9-dev`, deta
 - It will then call `aws iam detach-role-policy` to detach the policy from the role
 - Finally, it will use `aws iam delete-role` to delete the role
 
-🖥️ Run this command (copy and paste all lines together):
+**22.** Run this command (copy and paste all lines together):
 
 ```
 roles=$(aws iam list-roles --query 'Roles[?starts_with(RoleName, `Cloud9-devlab`)].RoleName' --output text)
@@ -245,11 +245,11 @@ And this time, your attempt succeeds, because you removed the attached policies 
 
 Please follow these instructions to clean-up your account so that there will be no on-going charges for any services used.
 
-🖥️ Click the **Maximize** icon in the top-right corner (next to the X) to return to the Cloud9 window.
+**23.** Click the **Maximize** icon in the top-right corner (next to the X) to return to the Cloud9 window.
 
-🖥️ Click the **AWS Cloud9** menu in the top-left, then click **Go To Your Dashboard**.
+**24.** Click the **AWS Cloud9** menu in the top-left, then click **Go To Your Dashboard**.
 
-🖥️ Click on the **cli-lab** box, then click the **Delete** button.
+**25.** Click on the **cli-lab** box, then click the **Delete** button.
 
 You will need to enter **Delete** to delete the environment.
 
